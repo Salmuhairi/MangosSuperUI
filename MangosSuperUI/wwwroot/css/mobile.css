@@ -1,0 +1,121 @@
+/* Phone and small-tablet layout. Desktop is untouched: everything here is inside
+   the media query. The sidebar is 250px fixed, which eats most of a phone screen,
+   so below 992px it slides off to the left and a button brings it back. */
+
+@media (max-width: 991.98px) {
+
+    .app-shell {
+        overflow: visible;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: var(--topbar-height);
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+        transition: transform .2s ease;
+        box-shadow: 0 0 24px rgba(0, 0, 0, .5);
+    }
+
+    .sidebar.m-open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* The backdrop only exists while the menu is open, so it never blocks taps otherwise. */
+    .m-backdrop {
+        position: fixed;
+        inset: var(--topbar-height) 0 0 0;
+        background: rgba(0, 0, 0, .5);
+        z-index: 99;
+    }
+
+    .m-menu-btn {
+        position: fixed;
+        left: 10px;
+        bottom: 14px;
+        z-index: 101;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid var(--sidebar-border);
+        background: var(--bg-sidebar);
+        color: var(--text-sidebar-active);
+        font-size: 17px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* The brand block is sidebar-width (250px) and the section tabs start after it,
+       so on a phone the tabs begin off-screen and the first one is cut in half.
+       Shrink the brand to its text and let the tabs scroll. */
+    .topnav-brand {
+        width: auto;
+        min-width: 0;
+        padding: 0 10px;
+    }
+
+    .topnav-brand-sub {
+        font-size: 13px;
+    }
+
+    .topnav-sections {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .topnav-sections > * {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+    /* Several pages put two panes side by side with widths written into the markup
+       (Database Explorer: a 280px table list next to a 340px relations panel). A phone
+       cannot fit both, so the panes stack and each takes the width it has. !important
+       is needed because those widths are inline styles. */
+    .content-body,
+    .content-body .d-flex,
+    .content-body .row {
+        flex-wrap: wrap !important;
+    }
+
+    /* A pane sized to the full viewport height pushes the one below it off the screen. */
+    .content-body [style*="max-height: calc(100vh"] {
+        max-height: 55vh !important;
+    }
+
+    .content-body [style*="width:"],
+    .content-body [style*="min-width:"] {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    /* Wide tables scroll inside their card instead of pushing the page sideways. */
+    .card-body {
+        overflow-x: auto;
+    }
+
+    /* Content was laid out for a wide column; let it breathe on a narrow one. */
+    .content-header,
+    .content-body {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .content-header h1 {
+        font-size: 22px;
+    }
+}
+
+@media (min-width: 992px) {
+    .m-menu-btn,
+    .m-backdrop {
+        display: none;
+    }
+}
